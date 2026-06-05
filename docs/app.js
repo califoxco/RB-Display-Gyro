@@ -151,7 +151,7 @@
 
     // Display Motion Data
     if (state.sensorData.motionSupported && state.sensorData.motionActive) {
-      // Acceleration with gravity
+      // Acceleration with gravity (always show if motion is active)
       var ag = state.sensorData.accelerationIncludingGravity;
       drawSensorLine(
         'Accel + Gravity (m/s²)',
@@ -159,25 +159,13 @@
         '#00d4ff'
       );
 
-      // Acceleration without gravity (if available)
-      if (state.sensorData.hasAcceleration) {
-        var a = state.sensorData.acceleration;
-        drawSensorLine(
-          'Acceleration (m/s²)',
-          'X:' + a.x.toFixed(2) + ' Y:' + a.y.toFixed(2) + ' Z:' + a.z.toFixed(2),
-          '#00ff88'
-        );
-      }
-
-      // Rotation rate (gyroscope)
-      if (state.sensorData.hasRotationRate) {
-        var r = state.sensorData.rotationRate;
-        drawSensorLine(
-          'Rotation Rate (°/s)',
-          'α:' + r.alpha.toFixed(2) + ' β:' + r.beta.toFixed(2) + ' γ:' + r.gamma.toFixed(2),
-          '#ff88ff'
-        );
-      }
+      // Rotation rate (gyroscope) - always show if motion is active
+      var r = state.sensorData.rotationRate;
+      drawSensorLine(
+        'Rotation Rate (°/s)',
+        'α:' + r.alpha.toFixed(2) + ' β:' + r.beta.toFixed(2) + ' γ:' + r.gamma.toFixed(2),
+        '#ff88ff'
+      );
     }
 
     // Display Orientation Data
