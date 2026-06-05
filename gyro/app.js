@@ -16,7 +16,11 @@
       motionSupported: false,
       orientationSupported: false,
       motionActive: false,
-      orientationActive: false
+      orientationActive: false,
+
+      // Track if acceleration sensor is available
+      hasAcceleration: false,
+      hasRotationRate: false
     }
   };
 
@@ -30,7 +34,8 @@
     }
 
     // Acceleration (without gravity) - m/s²
-    if (event.acceleration) {
+    if (event.acceleration && event.acceleration.x !== null) {
+      state.sensorData.hasAcceleration = true;
       state.sensorData.acceleration.x = event.acceleration.x || 0;
       state.sensorData.acceleration.y = event.acceleration.y || 0;
       state.sensorData.acceleration.z = event.acceleration.z || 0;
@@ -44,7 +49,8 @@
     }
 
     // Rotation Rate (Gyroscope) - deg/s
-    if (event.rotationRate) {
+    if (event.rotationRate && event.rotationRate.alpha !== null) {
+      state.sensorData.hasRotationRate = true;
       state.sensorData.rotationRate.alpha = event.rotationRate.alpha || 0;
       state.sensorData.rotationRate.beta = event.rotationRate.beta || 0;
       state.sensorData.rotationRate.gamma = event.rotationRate.gamma || 0;
@@ -154,8 +160,8 @@
       );
 
       // Acceleration without gravity (if available)
-      var a = state.sensorData.acceleration;
-      if (a.x !== 0 || a.y !== 0 || a.z !== 0) {
+      if (state.sensorData.hasAcceleration) {
+        var a = state.sensorData.acceleration;
         drawSensorLine(
           'Acceleration (m/s²)',
           'X:' + a.x.toFixed(2) + ' Y:' + a.y.toFixed(2) + ' Z:' + a.z.toFixed(2),
@@ -164,8 +170,8 @@
       }
 
       // Rotation rate (gyroscope)
-      var r = state.sensorData.rotationRate;
-      if (r.alpha !== 0 || r.beta !== 0 || r.gamma !== 0) {
+      if (state.sensorData.hasRotationRate) {
+        var r = state.sensorData.rotationRate;
         drawSensorLine(
           'Rotation Rate (°/s)',
           'α:' + r.alpha.toFixed(2) + ' β:' + r.beta.toFixed(2) + ' γ:' + r.gamma.toFixed(2),
